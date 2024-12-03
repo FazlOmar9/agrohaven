@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatBox from './ChatBox';
 import InputForm from './InputForm';
 import './Chat.css';
@@ -13,7 +13,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [userInput, setUserInput] = useState('');
 
-  const inference = async (input: string) => {
+  const inference = async () => {
     const client = new HfInference(import.meta.env.VITE_HF_API_KEY);
 
     const chatCompletion = await client
@@ -30,17 +30,29 @@ const Chat = () => {
                 It should be purely in text format, with no special snippets. Formatting MUST be proper.
                 You will politely decline to help with non urban farming related questions.
                 Do not exceed the 1000 token limit.`,
-          }, {
-            role: 'user',
-            content: input
-          }
+          },
+          ...messages,
         ],
         max_tokens: 1000,
       })
       .then((response) => response.choices[0]);
 
-    return chatCompletion.message;
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        role: 'system',
+        content:
+          chatCompletion.message.content ||
+          `Sorry, I'm having trouble understanding right now.`,
+      },
+    ]);
   };
+
+  useEffect(() => {
+    if (messages.length > 0 && messages[messages.length - 1].role === 'user') {
+      inference();
+    }
+  }, [messages]);
 
   // Send user input to Hugging Face API
   const sendMessage = async (event?: React.FormEvent) => {
@@ -54,33 +66,6 @@ const Chat = () => {
       ...prevMessages,
       { role: 'user', content: input },
     ]);
-
-    try {
-      // Send user input to Hugging Face API
-      const response = await inference(input);
-
-      // Get the model's response and add to the chat
-      const botResponse = response.content;
-      console.log('Bot response:', botResponse);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          role: 'bot',
-          content: botResponse
-            ? botResponse
-            : "Sorry, I'm having trouble understanding right now.",
-        },
-      ]);
-    } catch (error) {
-      console.error('Error fetching from Hugging Face:', error);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          role: 'bot',
-          content: 'Sorry, there was an error. Please try again later.',
-        },
-      ]);
-    }
   };
 
   return (
