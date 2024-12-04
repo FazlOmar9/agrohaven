@@ -1,7 +1,7 @@
 .navbar {
   width: 100%;
   padding: 20px;
-  background-color: rgba(0, 0, 0, 0.3); /* Change this color to modify the navbar background color */
+  background-color: #ffffff; /* Change this color to modify the navbar background color */
   color: white;
   text-align: left; /* Align the logo to the left */
   font-size: 24px;

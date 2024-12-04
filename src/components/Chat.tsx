@@ -9,9 +9,22 @@ interface Message {
   content: string;
 }
 
-const Chat = () => {
+interface ChatProps {
+  chatId: string;
+}
+
+const Chat: React.FC<ChatProps> = ({ chatId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [userInput, setUserInput] = useState('');
+
+  useEffect(() => {
+    const savedMessages = JSON.parse(localStorage.getItem(`chat-${chatId}`) || '[]');
+    setMessages(savedMessages);
+  }, [chatId]);
+
+  useEffect(() => {
+    localStorage.setItem(`chat-${chatId}`, JSON.stringify(messages));
+  }, [messages, chatId]);
 
   const inference = async () => {
     const client = new HfInference(import.meta.env.VITE_HF_API_KEY);
@@ -54,14 +67,12 @@ const Chat = () => {
     }
   }, [messages]);
 
-  // Send user input to Hugging Face API
   const sendMessage = async (event?: React.FormEvent) => {
     if (event) event.preventDefault();
     if (!userInput.trim()) return;
     let input = userInput;
     setUserInput('');
 
-    // Add user's message to the chat
     setMessages((prevMessages) => [
       ...prevMessages,
       { role: 'user', content: input },

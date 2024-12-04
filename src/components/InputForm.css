@@ -18,7 +18,7 @@ button {
   border: 1px solid #ccc;
   cursor: pointer;
   background-color: #4caf50; /* Change this color to modify the button color */
-  color: white;
+  color: black;
 }
 
 button:hover {
