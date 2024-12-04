@@ -1,7 +1,7 @@
 .navbar {
   width: 100%;
   padding: 20px;
-  background-color: #ccc; /* Change this color to modify the navbar background color */
+  background-color: rgba(0, 0, 0, 0.3); /* Change this color to modify the navbar background color */
   color: white;
   text-align: left; /* Align the logo to the left */
   font-size: 24px;
@@ -9,6 +9,6 @@
 }
 
 .logo {
-  color: #066b0a; /* Change this color to modify the logo color */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif /* Change this to modify the logo font family */
+  color: #08520b; /* Change this color to modify the logo color */
+  font-family:'Futura' /* Change this to modify the logo font family */
 }
