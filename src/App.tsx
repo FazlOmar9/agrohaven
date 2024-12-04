@@ -40,7 +40,7 @@ const App = () => {
       <Navbar />
       <div className="main-content">
         <ChatHistory chats={chats} selectChat={selectChat} createNewChat={createNewChat} />
-        {selectedChatId && <Chat chatId={selectedChatId} />}
+        {selectedChatId && <Chat chatId={selectedChatId} chatName={chats.filter(e => e.id === selectedChatId)[0].name}/>}
       </div>
     </div>
   );

@@ -11,9 +11,10 @@ interface Message {
 
 interface ChatProps {
   chatId: string;
+  chatName: string;
 }
 
-const Chat: React.FC<ChatProps> = ({ chatId }) => {
+const Chat: React.FC<ChatProps> = ({ chatId, chatName }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [userInput, setUserInput] = useState('');
 
@@ -81,6 +82,7 @@ const Chat: React.FC<ChatProps> = ({ chatId }) => {
 
   return (
     <div className='chat-container'>
+      <h2 style={{marginTop: '5px'}}>{chatName}</h2>
       <ChatBox messages={messages} />
       <InputForm
         userInput={userInput}
